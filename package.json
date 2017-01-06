@@ -65,6 +65,9 @@
           [
             "transform-react-display-name"
           ],
+             [
+           "transform-class-properties"
+          ],
           [
             "react-transform",
             {
