@@ -14,13 +14,13 @@ npm install
 ### Start Server
 
  ```
-npm start
+npm run start
 
 ```
 
 ### Build Production
 
  ```
-build
+npm run build
 
 ```
