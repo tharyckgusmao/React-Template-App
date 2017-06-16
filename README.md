@@ -11,7 +11,7 @@ npm install
 
 ```
 ### Start Server
-  
+
  ```
 npm start
 
@@ -23,13 +23,9 @@ npm start
 build:webpack
 
 ```
-or 
+or
 
  ```
 build
 
 ```
-
-
-
-

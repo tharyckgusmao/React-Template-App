@@ -1,35 +1,51 @@
-var path = require('path');
-var webpack = require('webpack');
+let path = require('path');
+let webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  devtool: 'source-map',
+  devtool: 'cheap-module-eval-source-map',
   entry: [
+    'react-hot-loader/patch',
     'webpack-hot-middleware/client',
-    './client/index'
+    './app/app'
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, '/dist/'),
     filename: 'bundle.js',
-    publicPath: '/static/'
+    publicPath: '/'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new HtmlWebpackPlugin({
+         template: 'app/index.tpl.html',
+         inject: 'body',
+         filename: 'index.html'
+       }),
   ],
   module: {
     loaders: [
-    // js
-    {
-      test: /\.js$/,
-      loaders: ['babel'],
-      include: path.join(__dirname, 'client')
-    },
-    // CSS
-    { 
-      test: /\.styl$/, 
-      include: path.join(__dirname, 'client'),
-      loader: 'style-loader!css-loader!stylus-loader'
-    }
+      {
+        test: /\.js?$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        options: {
+          babelrc: false,
+          presets: ['es2015', 'react', 'stage-0'],
+          plugins: ['react-hot-loader/babel'],
+        },
+      },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader?modules&p&localIdentName=__[hash:base64:5]'
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        loader: 'file-loader',
+      }
+      ,{
+        test: /\.(jpg|png|gif)$/,
+        loader:    'file-loader'
+      }
     ]
   }
-};
+}

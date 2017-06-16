@@ -1,44 +1,68 @@
 var path = require('path');
 var webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+var StatsWriterPlugin = require("webpack-stats-plugin").StatsWriterPlugin;
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  devtool: 'source-map',
+  // The entry file. All your app roots fromn here.
   entry: [
-    
-    './client/index'
+    './app/app'
   ],
+  // Where you want the output to go
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/static/'
+    path: path.join(__dirname, '/dist/'),
+    filename: '[name]-[hash].min.js',
+    publicPath: '/'
   },
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': "'production'"
-      }
-    }),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
-        warnings: false
+        warnings: false,
+        screw_ie8: true
       }
-    })
+    }),
+    new ExtractTextPlugin('[name]-[hash].min.css'),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    }),
+    new StatsWriterPlugin('webpack.stats.json', {
+            source: false,
+            modules: false
+        }),
+        new HtmlWebpackPlugin({
+             template: 'app/index.tpl.html',
+             inject: 'body',
+             filename: 'index.html'
+           }),
   ],
+
   module: {
     loaders: [
-    // js
-    {
-      test: /\.js$/,
-      loaders: ['babel'],
-      include: path.join(__dirname, 'client')
-    },
-    // CSS
-    { 
-      test: /\.styl$/, 
-      include: path.join(__dirname, 'client'),
-      loader: 'style-loader!css-loader!stylus-loader'
-    }
+      {
+        test: /\.js?$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        options: {
+          babelrc: false,
+          presets: ['es2015', 'react', 'stage-0']
+        },
+      },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract({
+          fallback:'style-loader',
+        use:'css-loader?sourceMap&modules&importLoaders=1&localIdentName=__[hash:base64:5]!postcss-loader'
+        })
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        loader: 'file-loader',
+      }
+      ,{
+        test: /\.(jpg|png|gif)$/,
+        loader:    'file-loader'
+      }
     ]
-  }
+  },
 };
