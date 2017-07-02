@@ -1,33 +1,47 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Router, browserHistory } from 'react-router';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { syncHistoryWithStore } from 'react-router-redux';
 
 
+import {routes} from './routes/routes';
+import configureStore from './store/configureStore';
 
-//Components
-import App from './containers/App';
-import Home from './components/Home';
+
+import Root from './containers/Root';
+
+
+const store = configureStore();
+const history = syncHistoryWithStore(browserHistory, store);
+
+
 
 const root =  document.getElementById('root');
 
-const render = () => {
   ReactDOM.render(
     <AppContainer>
-      <Router history={browserHistory}>
-        <Route path="/" component={App}>
-          <IndexRoute  component={Home} />
-        </Route>
-      </Router>
-
+      <Root store={store} history={history} routes={routes}></Root>
     </AppContainer>,
   root
-  )
-}
+  );
 
-render();
+
 
 if (module.hot) {
 
-  module.hot.accept()
+  module.hot.accept('./routes/routes', () => {
+
+    const NextRoot = require('./containers/Root').default;
+    const NextRoutes = require('./routes/routes').routes;
+
+
+    ReactDOM.render(
+      <AppContainer>
+          <NextRoot store={store} history={history} routes={routes}></NextRoot>
+     </AppContainer>,
+    root
+    );
+  })
 }

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": " NODE_ENV=development node server.js",
     "build": "rimraf dist && webpack --config ./webpack.config.prod.js --progress --profile --colors"
   },
   "author": "Tharyck Gusmao Metzker",
@@ -21,7 +21,12 @@
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-hot-loader": "^3.0.0-beta.7",
+    "react-redux": "^5.0.5",
     "react-router": "^3.0.5",
+    "react-router-redux": "^4.0.8",
+    "redux": "^3.7.1",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0",
     "rimraf": "^2.6.1",
     "webpack": "^2.5.1",
     "webpack-dev-middleware": "^1.10.2",
@@ -29,6 +34,7 @@
     "webpack-stats-plugin": "^0.1.5"
   },
   "devDependencies": {
+    "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.1",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",

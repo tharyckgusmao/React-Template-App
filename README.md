@@ -1,5 +1,5 @@
 # React-Template-App
-Template React + Webpack + Babel.
+Template React + Redux + Redux Thunk + Webpack + Babel.
 
 Modelo para configuração do ambiente de desenvolvimento React + webpack + hotloader + express.
 
